@@ -6,52 +6,15 @@
 
 using namespace std;
 
+//Functions
+bool ReadIntoDataArray(ifstream& input_File,
+	int& max, float dataArray[], float* ptrArray[]);
 
-bool Get_DataArray(ifstream& input_File,
-	int &max, float dataArray[], float *ptrArray[]) {
+void Print_dataArray(float dataArray[], int max);
+void Print_ptrArray(float* ptrArray[], int max);
 
-	if (!(input_File >> max)) {
-		return true;
-	}
-
-	for (int i = 0; i < max; i++) {
-		input_File >> dataArray[i];
-		ptrArray[i] = &dataArray[i];
-	}
-	return false;
-}
-
-void Print_DataArray(float dataArray[], int max) {
-	cout << "Data Array elements are: " << endl;
-	for (unsigned i = 0; i < max; i++) {
-		cout << dataArray[i] << setw(6);
-	}
-	cout << endl;
-}
-
-
-void Print_PointerArray(float* ptrArray[], int max) {
-	cout << "The Pointer Array" << endl;
-	for (int i = 0; i < max; i++) {
-		cout << *ptrArray[i] << setw(6);
-	}
-	cout << endl;
-}
-
-void Swap_ptr(float*& a, float*& b){
-	float* temp = a;
-	a = b;
-	b = temp;
-}
-
-void Sorting(float* ptrArray[], int max) {
-	for (int i = 0; i < max; i++) {
-		for (int j = i + 1; j < max; j++) {
-			if (*ptrArray[j] < *ptrArray[i])
-				Swap_ptr(ptrArray[j], ptrArray[i]);
-		}
-	}
-}
+void SwapIntPtr(float*& a, float*& b);
+void Sort_Array(float* ptrArray[], int max);
 
 int main() {
 	//Variable declaration
@@ -64,20 +27,65 @@ int main() {
 
 	input_matrix_FIle.open(input_file_name);
 	if (input_matrix_FIle.fail()) {
-		cout << "File " << input_file_name << "could not be opened" << endl;
+		cout << "File " << input_file_name << "has the error!!" << endl;
 		cin.get();
 		exit(EXIT_FAILURE);
 	}
 	
-	while (! Get_DataArray (input_matrix_FIle, max, data_Array,ptr_Array)) {
-		Sorting(ptr_Array, max);
-		Print_PointerArray(ptr_Array, max);
-		Print_DataArray(data_Array, max);
-		cout << endl << "Press any key to continue ...";
+	while (!ReadIntoDataArray(input_matrix_FIle, max, data_Array,ptr_Array)) {
+		Sort_Array(ptr_Array, max);
+		Print_ptrArray(ptr_Array, max);
+		Print_dataArray(data_Array, max);
+		cout << endl << "Press any key to continue ,,,,";
 		cin.get();
 		cout << endl << endl;
 	}
 	
 	input_matrix_FIle.close();
 	return EXIT_SUCCESS;
+}
+
+bool ReadIntoDataArray(ifstream& input_File,
+	int& max, float dataArray[], float* ptrArray[]) {
+
+	if (!(input_File >> max)) {
+		return true;
 	}
+
+	for (int i = 0; i < max; i++) {
+		input_File >> dataArray[i];
+		ptrArray[i] = &dataArray[i];
+	}
+	return false;
+}
+
+void Print_dataArray(float dataArray[], int max) {
+	cout << "Now displaying data in the original order " << endl;
+	for (unsigned i = 0; i < max; i++) {
+		cout << dataArray[i] << setw(6);
+	}
+	cout << endl;
+}
+
+void Print_ptrArray(float* ptrArray[], int max) {
+	cout << "Now displaying data in sorted order" << endl;
+	for (int i = 0; i < max; i++) {
+		cout << *ptrArray[i] << setw(6);
+	}
+	cout << endl;
+}
+
+void SwapIntPtr(float*& a, float*& b) {
+	float* temp = a;
+	a = b;
+	b = temp;
+}
+
+void Sort_Array(float* ptrArray[], int max) {
+	for (int i = 0; i < max; i++) {
+		for (int j = i + 1; j < max; j++) {
+			if (*ptrArray[j] < *ptrArray[i])
+				SwapIntPtr(ptrArray[j], ptrArray[i]);
+		}
+	}
+}
