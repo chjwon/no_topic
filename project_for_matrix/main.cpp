@@ -3,36 +3,36 @@
 #include<fstream>
 #include<conio.h>
 
-
+// fixed
 using namespace std;
 
 //Functions
 bool ReadIntoDataArray(ifstream& input_File,
-	int& max, float dataArray[], float* ptrArray[]);
+	unsigned& max, int dataArray[], int* ptrArray[]);
 
-void Print_dataArray(float dataArray[], int max);
-void Print_ptrArray(float* ptrArray[], int max);
+void Print_dataArray(int dataArray[], unsigned max);
+void Print_ptrArray(int* ptrArray[], unsigned max);
 
-void SwapIntPtr(float*& a, float*& b);
-void Sort_Array(float* ptrArray[], int max);
+void SwapIntPtr(int*& a, int*& b);
+void Sort_Array(int* ptrArray[], unsigned max);
 
 int main() {
 	//Variable declaration
 	const unsigned       ARRAY_SIZE = 20;
-	int                  max = 0;
-	float                data_Array[ARRAY_SIZE];
-	float                * ptr_Array[ARRAY_SIZE];
-	string               input_file_name = "arrayData.txt";
-	ifstream             input_matrix_FIle;
+	unsigned             max = 0;
+	int                  data_Array[ARRAY_SIZE];
+	int                  * ptr_Array[ARRAY_SIZE];
+	string               INPUT_FILE_NAME = "arrayData.txt";
+	ifstream             inputArray;
 
-	input_matrix_FIle.open(input_file_name);
-	if (input_matrix_FIle.fail()) {
-		cout << "File " << input_file_name << "has the error!!" << endl;
+	inputArray.open(INPUT_FILE_NAME);
+	if (inputArray.fail()) {
+		cout << "File " << INPUT_FILE_NAME << "has the error!!" << endl;
 		cin.get();
 		exit(EXIT_FAILURE);
 	}
-	
-	while (!ReadIntoDataArray(input_matrix_FIle, max, data_Array,ptr_Array)) {
+
+	while (!ReadIntoDataArray(inputArray, max, data_Array, ptr_Array)) {
 		Sort_Array(ptr_Array, max);
 		Print_ptrArray(ptr_Array, max);
 		Print_dataArray(data_Array, max);
@@ -40,13 +40,13 @@ int main() {
 		cin.get();
 		cout << endl << endl;
 	}
-	
-	input_matrix_FIle.close();
+
+	inputArray.close();
 	return EXIT_SUCCESS;
 }
 
 bool ReadIntoDataArray(ifstream& input_File,
-	int& max, float dataArray[], float* ptrArray[]) {
+	unsigned& max, int dataArray[], int* ptrArray[]) {
 
 	if (!(input_File >> max)) {
 		return true;
@@ -59,7 +59,7 @@ bool ReadIntoDataArray(ifstream& input_File,
 	return false;
 }
 
-void Print_dataArray(float dataArray[], int max) {
+void Print_dataArray(int dataArray[], unsigned max) {
 	cout << "Now displaying data in the original order " << endl;
 	for (unsigned i = 0; i < max; i++) {
 		cout << dataArray[i] << setw(6);
@@ -67,7 +67,7 @@ void Print_dataArray(float dataArray[], int max) {
 	cout << endl;
 }
 
-void Print_ptrArray(float* ptrArray[], int max) {
+void Print_ptrArray(int* ptrArray[], unsigned max) {
 	cout << "Now displaying data in sorted order" << endl;
 	for (int i = 0; i < max; i++) {
 		cout << *ptrArray[i] << setw(6);
@@ -75,13 +75,13 @@ void Print_ptrArray(float* ptrArray[], int max) {
 	cout << endl;
 }
 
-void SwapIntPtr(float*& a, float*& b) {
-	float* temp = a;
+void SwapIntPtr(int*& a, int*& b) {
+	int *temp = a;
 	a = b;
 	b = temp;
 }
 
-void Sort_Array(float* ptrArray[], int max) {
+void Sort_Array(int* ptrArray[], unsigned max) {
 	for (int i = 0; i < max; i++) {
 		for (int j = i + 1; j < max; j++) {
 			if (*ptrArray[j] < *ptrArray[i])
